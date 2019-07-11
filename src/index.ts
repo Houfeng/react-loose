@@ -10,8 +10,8 @@ declare module "React" {
   }
 }
 
-React.PropTypes = React.PropTypes || PropTypes;
-React.createClass = React.createClass || function (options: any) {
+if (!React.PropTypes) React.PropTypes = PropTypes;
+if (!React.createClass) React.createClass = function (options: any) {
   class ReactComponent extends React.Component {
     static displayName = options.displayName;
     static propTypes = options.propTypes;
