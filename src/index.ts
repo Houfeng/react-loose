@@ -13,6 +13,7 @@ declare module "React" {
 
 React.PropTypes = PropTypes;
 React.createClass = (options: any) => {
+  delete React.Component.prototype.isMounted;
   class Component extends React.Component {
     static displayName = options.displayName;
     static propTypes = options.propTypes;
@@ -30,6 +31,7 @@ React.createClass = (options: any) => {
     }
     private __mounted = false;
     isMounted() {
+      if (options.isMounted) return options.isMounted.call(this);
       return this.__mounted;
     }
     componentDidMount(...args) {
