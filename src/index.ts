@@ -13,8 +13,7 @@ declare module "React" {
 
 React.PropTypes = PropTypes;
 React.createClass = (options: any) => {
-  delete React.Component.prototype.isMounted;
-  class Component extends React.Component {
+  class ReactComponent extends React.Component {
     static displayName = options.displayName;
     static propTypes = options.propTypes;
     static defaultProps = options.getDefaultProps ?
@@ -47,5 +46,5 @@ React.createClass = (options: any) => {
       }
     }
   }
-  return Component;
+  return ReactComponent;
 };
