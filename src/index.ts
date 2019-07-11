@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { isFunction } from 'util';
 
 type PropTypesType = typeof PropTypes;
 declare module "React" {
@@ -11,8 +10,8 @@ declare module "React" {
   }
 }
 
-React.PropTypes = PropTypes;
-React.createClass = (options: any) => {
+React.PropTypes = React.PropTypes || PropTypes;
+React.createClass = React.createClass || function (options: any) {
   class ReactComponent extends React.Component {
     static displayName = options.displayName;
     static propTypes = options.propTypes;
@@ -20,10 +19,11 @@ React.createClass = (options: any) => {
       options.getDefaultProps() : {};
     constructor(props: any, ...args) {
       super(props, ...args);
-      for (let key in options) {
-        if (key in this) continue;
-        const value = options[key];
-        this[key] = isFunction(value) ? value.bind(this) : value;
+      for (let key in this) {
+        const func = this[key];
+        if (typeof func === 'function') {
+          this[key] = func.bind(this);
+        }
       }
       this.state = options.getInitialState ?
         options.getInitialState.call(this) : {};
@@ -46,5 +46,6 @@ React.createClass = (options: any) => {
       }
     }
   }
+  Object.assign(ReactComponent.prototype, options);
   return ReactComponent;
 };
